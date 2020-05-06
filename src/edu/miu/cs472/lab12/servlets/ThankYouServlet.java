@@ -14,6 +14,10 @@ public class ThankYouServlet extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String fullName = request.getParameter("fullName");
+        StringBuilder sb = new StringBuilder();
+
+
         response.setContentType("text/html");
         response.setBufferSize(8192);
         StringBuilder sb = new StringBuilder();
@@ -27,7 +31,7 @@ public class ThankYouServlet extends HttpServlet {
         sb.append("<link rel='stylesheet' href='https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css' integrity='sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh' crossorigin='anonymous'>");
         sb.append("<link rel='stylesheet' type='text/css' href='../styles/form-styles.css'/>");
 
-        sb.append(" <title>CS472-WAP LAB12</title>");
+        sb.append(" <title>Thank You!</title>");
         sb.append("</head>");
         sb.append("<body>");
         sb.append("<header>");
@@ -63,24 +67,24 @@ public class ThankYouServlet extends HttpServlet {
         sb.append("<div class='container border mt-5'>");
         sb.append("<div class='col-12 form-group mb-5 mt-1'>");
         sb.append("  <p class='text-secondary float-right'>Wednesday, 6 2020.</p>");
-        </div>
-        <div class="col-12 form-group bg-light mt-5">
-            <h1>Thank You! Your message has been received as follows:</h1>
-        </div>
-        <div class="col-12 form-group mt-5">
-            <p>Name:</p>
-        </div>
-        <div class="col-12 form-group mt-5">
-            <p>Gender:</p>
-        </div>
-        <div class="col-12 form-group mt-5">
-            <p>Category:</p>
-        </div>
-        <div class="col-12 form-group mt-5">
-            <p>Message:</p>
-        </div>
+        sb.append(" </div>");
+        sb.append(" <div class='col-12 form-group bg-light mt-5'>");
+        sb.append("   <h1>Thank You! Your message has been received as follows:</h1>");
+        sb.append("  </div>");
+        sb.append("<div class='col-12 form-group mt-5'>");
+        sb.append("  <p>Name:</p>");
+        sb.append("</div>");
+        sb.append("<div class='col-12 form-group mt-5'>");
+        sb.append("  <p>Gender:</p>");
+        sb.append("</div>");
+        sb.append("<div class='col-12 form-group mt-5'>");
+        sb.append("   <p>Category:</p>");
+        sb.append("</div>");
+        sb.append("<div class='col-12 form-group mt-5'>");
+        sb.append(" <p>Message:</p>");
+        sb.append("</div>");
 
-    </div>
+        sb.append("</div>");
 
         sb.append("</main>");
 

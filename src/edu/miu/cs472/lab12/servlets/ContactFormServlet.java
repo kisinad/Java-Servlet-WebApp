@@ -28,7 +28,7 @@ public class ContactFormServlet extends HttpServlet {
         sb.append("<link rel='stylesheet' href='https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css' integrity='sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh' crossorigin='anonymous'>");
         sb.append("<link rel='stylesheet' type='text/css' href='../styles/form-styles.css'/>");
 
-        sb.append(" <title>CS472-WAP LAB12</title>");
+        sb.append(" <title>Contact Us</title>");
         sb.append("</head>");
         sb.append("<body>");
         sb.append("<header>");
