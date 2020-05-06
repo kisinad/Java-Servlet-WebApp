@@ -67,10 +67,28 @@ public class ContactFormServlet extends HttpServlet {
         sb.append("<div class='container bg-light'>");
         sb.append("<h2>Customer Contact Form </h2>");
         sb.append("<form method='post' action='./contactformhandler'>");
-        Object objErrMsg = request.getAttribute("errMsg");
-        if(objErrMsg != null){
-            String strErrMsg = (String)objErrMsg;
+        Object objErrMsgName = request.getAttribute("errMsgName");
+        Object objErrMsgTextArea = request.getAttribute("errMsgTextArea");
+        Object objErrMsgCategory = request.getAttribute("errMsgCategory");
+        Object objErrMsgGender = request.getAttribute("errMsgGender");
+
+        if((objErrMsgName != null )&& (objErrMsgTextArea != null) && (objErrMsgCategory != null) && (objErrMsgGender != null)){
+            String strErrMsg = (String)objErrMsgName;
+            String strErrMsg2 = (String)objErrMsgTextArea;
+            String strErrMsg3 = (String)objErrMsgCategory;
+            String strErrMsg4 = (String)objErrMsgGender;
             sb.append(strErrMsg);
+            sb.append(strErrMsg2);
+            sb.append(strErrMsg3);
+            sb.append(strErrMsg4);
+        }
+        if(objErrMsgName != null){
+            String strErrMsg = (String)objErrMsgName;
+            sb.append(strErrMsg);
+        }
+        if(objErrMsgTextArea != null){
+            String strErrMsgTxt = (String)objErrMsgTextArea;
+            sb.append(strErrMsgTxt);
         }
         sb.append(" <div class='row mt-5'>");
         sb.append(" <div class='col-12 form-group '>");
