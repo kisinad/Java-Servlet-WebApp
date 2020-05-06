@@ -6,12 +6,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.PrintWriter;
 
-@WebServlet(name = "ContactFormServlet", urlPatterns = {"/ContactFormServlet","/contactform"})
-public class ContactFormServlet extends HttpServlet {
+@WebServlet(name = "ThankYouServlet")
+public class ThankYouServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        doGet(request, response);
+
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -61,53 +60,28 @@ public class ContactFormServlet extends HttpServlet {
         sb.append("</header>");
 
         sb.append("<main>");
+        sb.append("<div class='container border mt-5'>");
+        sb.append("<div class='col-12 form-group mb-5 mt-1'>");
+        sb.append("  <p class='text-secondary float-right'>Wednesday, 6 2020.</p>");
+        </div>
+        <div class="col-12 form-group bg-light mt-5">
+            <h1>Thank You! Your message has been received as follows:</h1>
+        </div>
+        <div class="col-12 form-group mt-5">
+            <p>Name:</p>
+        </div>
+        <div class="col-12 form-group mt-5">
+            <p>Gender:</p>
+        </div>
+        <div class="col-12 form-group mt-5">
+            <p>Category:</p>
+        </div>
+        <div class="col-12 form-group mt-5">
+            <p>Message:</p>
+        </div>
 
+    </div>
 
-
-        sb.append("<div class='container bg-light'>");
-        sb.append("<h2>Customer Contact Form </h2>");
-        sb.append("<form method='post' action='./contactformhandler'>");
-        Object objErrMsg = request.getAttribute("errMsg");
-        if(objErrMsg != null){
-            String strErrMsg = (String)objErrMsg;
-            sb.append(strErrMsg);
-        }
-        sb.append(" <div class='row mt-5'>");
-        sb.append(" <div class='col-12 form-group '>");
-        sb.append("  <div class='form-group'>");
-        sb.append("  <label for='nameId'>*Name:</label>");
-        sb.append("       <input class='form-control form-control-lg' type='text' id='nameId' name='nameTextArea' placeholder='e.g. John Smith' />");
-        sb.append("    <p class='text-secondary'>Enter your full name.</p>");
-        sb.append("   </div>");
-        sb.append("  <div class='col-12 form-group'>");
-        sb.append("   <label>*Gender: </label><br>");
-        sb.append("  <input type='checkbox' id='maleId' name='gender' value='male'>" );
-        sb.append("  <label for='maleId'>Male</label>");
-        sb.append("     <input type='checkbox' id='femaleId' name='gender' value='female'>");
-        sb.append("   <label for='femaleId'>Male</label>");
-        sb.append("     </div>");
-        sb.append("  <div class='col-12 form-group'>");
-        sb.append("    <label for='categoryId'>*Category:</label>");
-        sb.append("        <select id='categoryId' class='form-control form-control-lg' name='category'>");
-        sb.append("         <option value=''>Select...</option>");
-        sb.append("    <option>Category One</option>");
-        sb.append("<option>Category Two</option>");
-        sb.append("  <option>Category Three</option>");
-        sb.append(" <option>Category Four</option>");
-        sb.append("    </select>");
-        sb.append("   </div>");
-        sb.append("  <div class='col-12 form-group'>");
-        sb.append("     <label for='messageId'>Example textarea</label>");
-        sb.append("    <textarea class='form-control' id='messageId' rows='3' name='txtArea'></textarea>");
-        sb.append("     </div>");
-        sb.append("    <div class='col-12 form-group'>");
-        sb.append(" <input id='submit' class='col-12 btn btn-primary btn-lg' type='submit' value='Submit'>");
-        sb.append("   </div>");
-
-        sb.append(" </div>");
-        sb.append(" </div>");
-        sb.append("</form>");
-        sb.append(" </div>");
         sb.append("</main>");
 
 
@@ -115,7 +89,7 @@ public class ContactFormServlet extends HttpServlet {
         sb.append("integrity='sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n'");
         sb.append("crossorigin='anonymous'></script>");
         sb.append("<script src='https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js'");
-                sb.append("integrity='sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo'");
+        sb.append("integrity='sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo'");
         sb.append("crossorigin='anonymous'></script>");
         sb.append("<script src='https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js");
         sb.append(" integrity='sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6'");
@@ -124,7 +98,5 @@ public class ContactFormServlet extends HttpServlet {
 
         sb.append("</body>");
         sb.append("</html>");
-        PrintWriter printWriter = response.getWriter();
-        printWriter.println(sb.toString());
     }
 }
