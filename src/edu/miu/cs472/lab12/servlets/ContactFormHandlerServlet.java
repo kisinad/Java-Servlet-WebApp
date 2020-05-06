@@ -31,6 +31,9 @@ public class ContactFormHandlerServlet extends HttpServlet {
             String url = "thankyou?fullName=" + fullName;
             response.sendRedirect(url); // HTTP response code 302
         }
+        if(msgArea == "" || msgArea == null){
+
+        }
 
     }
 

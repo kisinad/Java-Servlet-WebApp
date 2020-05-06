@@ -1,5 +1,6 @@
 package edu.miu.cs472.lab12.servlets;
 
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -16,6 +17,7 @@ public class ThankYouServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String fullName = request.getParameter("fullName");
         StringBuilder sb = new StringBuilder();
+        ServletContext context = request.getServletContext();
 
 
         response.setContentType("text/html");
@@ -72,7 +74,7 @@ public class ThankYouServlet extends HttpServlet {
         sb.append("   <h1>Thank You! Your message has been received as follows:</h1>");
         sb.append("  </div>");
         sb.append("<div class='col-12 form-group mt-5'>");
-        sb.append("  <p>Name:</p>");
+        sb.append("  <p>Name: "+fullName+ "</p>");
         sb.append("</div>");
         sb.append("<div class='col-12 form-group mt-5'>");
         sb.append("  <p>Gender:</p>");
@@ -102,5 +104,7 @@ public class ThankYouServlet extends HttpServlet {
 
         sb.append("</body>");
         sb.append("</html>");
+        response.setContentType("text/html");
+        response.getWriter().println(sb.toString());
     }
 }
