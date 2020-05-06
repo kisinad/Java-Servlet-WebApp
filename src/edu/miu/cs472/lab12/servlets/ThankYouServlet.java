@@ -7,7 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet(name = "ThankYouServlet")
+@WebServlet(name = "ThankYouServlet", urlPatterns = {"/ThankYouServlet", "/thankyou"})
 public class ThankYouServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
@@ -20,7 +20,7 @@ public class ThankYouServlet extends HttpServlet {
 
         response.setContentType("text/html");
         response.setBufferSize(8192);
-        StringBuilder sb = new StringBuilder();
+//        StringBuilder sb = new StringBuilder();
         sb.append("<!doctype html>");
         sb.append("<html lang='en'>");
         sb.append("<head>");
