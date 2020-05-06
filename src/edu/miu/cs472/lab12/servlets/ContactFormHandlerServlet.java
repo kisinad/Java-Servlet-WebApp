@@ -17,11 +17,15 @@ public class ContactFormHandlerServlet extends HttpServlet {
         String category = request.getParameter("category");
         String msgArea = request.getParameter("txtArea");
 
-        if((fullName == "" || fullName == null) && (msgArea == "" || msgArea == null) && (category == null) && (gender == null)){
+        if((fullName == "" || fullName == null) && (msgArea == "" || msgArea == null) && (category == null || category == "") && (gender == null)){
             String errMsgName = "<span style='color:red;'>Your Name is required!</span><br />";
             request.setAttribute("errMsgName", errMsgName);
             String errMsgTextArea = "<span style='color:red;'>Message is missing.</span><br />";
             request.setAttribute("errMsgTextArea", errMsgTextArea);
+            String errMsgCategory = "<span style='color:red;'>Category is missing.</span><br />";
+            request.setAttribute("errMsgCategory", errMsgCategory);
+            String errMsgGender = "<span style='color:red;'>Gender is missing.</span><br />";
+            request.setAttribute("errMsgGender", errMsgGender);
             request.getRequestDispatcher("/contactform").forward(request, response);
         }
         else if(fullName == "" || fullName == null){
@@ -35,7 +39,7 @@ public class ContactFormHandlerServlet extends HttpServlet {
             String errMsgTextArea = "<span style='color:red;'>Message is missing.</span><br />";
             request.setAttribute("errMsgTextArea", errMsgTextArea);
             request.getRequestDispatcher("/contactform").forward(request, response);
-        }else if(category == null){
+        }else if(category == ""){
             String errMsgCategory = "<span style='color:red;'>Category is missing.</span><br />";
             request.setAttribute("errMsgCategory", errMsgCategory);
             request.getRequestDispatcher("/contactform").forward(request, response);
@@ -49,7 +53,9 @@ public class ContactFormHandlerServlet extends HttpServlet {
             //go thank you page
             HttpSession session = request.getSession(true);
             session.setAttribute("Name", ": " + fullName);
-
+            session.setAttribute("Gender", "Gender : " + gender);
+            session.setAttribute("Category", "Category : " + category);
+            session.setAttribute("MessageArea", "Message : " + msgArea);
             String url = "thankyou?fullName=" + fullName;
             response.sendRedirect(url); // HTTP response code 302
         }

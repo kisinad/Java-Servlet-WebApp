@@ -72,7 +72,7 @@ public class ContactFormServlet extends HttpServlet {
         Object objErrMsgCategory = request.getAttribute("errMsgCategory");
         Object objErrMsgGender = request.getAttribute("errMsgGender");
 
-        if((objErrMsgName != null )&& (objErrMsgTextArea != null) && (objErrMsgCategory != null) && (objErrMsgGender != null)){
+        if((objErrMsgName != null )&& (objErrMsgTextArea != null) && (objErrMsgCategory != "") && (objErrMsgGender != null)){
             String strErrMsg = (String)objErrMsgName;
             String strErrMsg2 = (String)objErrMsgTextArea;
             String strErrMsg3 = (String)objErrMsgCategory;
@@ -90,6 +90,14 @@ public class ContactFormServlet extends HttpServlet {
             String strErrMsgTxt = (String)objErrMsgTextArea;
             sb.append(strErrMsgTxt);
         }
+        if(objErrMsgCategory != null){
+            String strErrCategory = (String)objErrMsgCategory;
+            sb.append(strErrCategory);
+        }
+        if(objErrMsgGender != null){
+            String strErrMsgGender = (String)objErrMsgGender;
+            sb.append(strErrMsgGender);
+        }
         sb.append(" <div class='row mt-5'>");
         sb.append(" <div class='col-12 form-group '>");
         sb.append("  <div class='form-group'>");
@@ -106,12 +114,12 @@ public class ContactFormServlet extends HttpServlet {
         sb.append("     </div>");
         sb.append("  <div class='col-12 form-group'>");
         sb.append("    <label for='categoryId'>*Category:</label>");
-        sb.append("        <select id='categoryId' class='form-control form-control-lg' name='category'>");
+        sb.append("    <select id='categoryId' class='form-control form-control-lg' name='category'>");
         sb.append("         <option value=''>Select...</option>");
-        sb.append("    <option>Category One</option>");
-        sb.append("<option>Category Two</option>");
-        sb.append("  <option>Category Three</option>");
-        sb.append(" <option>Category Four</option>");
+        sb.append("         <option value='CategoryOne'>Category One</option>");
+        sb.append("         <option value='CategoryTwo'>Category Two</option>");
+        sb.append("         <option value='CategoryThree'>Category Three</option>");
+        sb.append("         <option value='CategoryFour'>Category Four</option>");
         sb.append("    </select>");
         sb.append("   </div>");
         sb.append("  <div class='col-12 form-group'>");

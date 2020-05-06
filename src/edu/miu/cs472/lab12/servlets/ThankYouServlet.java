@@ -16,6 +16,10 @@ public class ThankYouServlet extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String fullName = request.getParameter("fullName");
+        String gender = request.getParameter("gender");
+        String category = request.getParameter("category");
+        String msgArea = request.getParameter("msgArea");
+
         StringBuilder sb = new StringBuilder();
         ServletContext context = request.getServletContext();
 
@@ -77,13 +81,13 @@ public class ThankYouServlet extends HttpServlet {
         sb.append("  <p>Name: "+fullName+ "</p>");
         sb.append("</div>");
         sb.append("<div class='col-12 form-group mt-5'>");
-        sb.append("  <p>Gender:</p>");
+        sb.append("  <p>"+ request.getSession().getAttribute("Gender")+ "</p>");
         sb.append("</div>");
         sb.append("<div class='col-12 form-group mt-5'>");
-        sb.append("   <p>Category:</p>");
+        sb.append("   <p> " +request.getSession().getAttribute("Category")+"</p>");
         sb.append("</div>");
         sb.append("<div class='col-12 form-group mt-5'>");
-        sb.append(" <p>Message:</p>");
+        sb.append(" <p>" + request.getSession().getAttribute("MessageArea")+"</p>");
         sb.append("</div>");
 
         sb.append("</div>");
