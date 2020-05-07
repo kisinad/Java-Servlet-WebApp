@@ -15,8 +15,15 @@ public class ContactFormServlet extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+//       incrHitCount();
         response.setContentType("text/html");
         response.setBufferSize(8192);
+        StringBuilder sb = this.generateContactUsForm(request);
+        PrintWriter printWriter = response.getWriter();
+        printWriter.println(sb.toString());
+    }
+
+    private StringBuilder generateContactUsForm(HttpServletRequest request) {
         StringBuilder sb = new StringBuilder();
         sb.append("<!doctype html>");
         sb.append("<html lang='en'>");
@@ -28,7 +35,7 @@ public class ContactFormServlet extends HttpServlet {
         sb.append("<link rel='stylesheet' href='https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css' integrity='sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh' crossorigin='anonymous'>");
         sb.append("<link rel='stylesheet' type='text/css' href='../styles/form-styles.css'/>");
 
-        sb.append(" <title>Contact Us</title>");
+        sb.append(" <title>Customer Contact App</title>");
         sb.append("</head>");
         sb.append("<body>");
         sb.append("<header>");
@@ -63,73 +70,126 @@ public class ContactFormServlet extends HttpServlet {
         sb.append("<main>");
 
 
-
         sb.append("<div class='container bg-light'>");
         sb.append("<h2>Customer Contact Form </h2>");
         sb.append("<form method='post' action='./contactformhandler'>");
-        Object objErrMsgName = request.getAttribute("errMsgName");
-        Object objErrMsgTextArea = request.getAttribute("errMsgTextArea");
-        Object objErrMsgCategory = request.getAttribute("errMsgCategory");
-        Object objErrMsgGender = request.getAttribute("errMsgGender");
 
-        if((objErrMsgName != null )&& (objErrMsgTextArea != null) && (objErrMsgCategory != "") && (objErrMsgGender != null)){
-            String strErrMsg = (String)objErrMsgName;
-            String strErrMsg2 = (String)objErrMsgTextArea;
-            String strErrMsg3 = (String)objErrMsgCategory;
-            String strErrMsg4 = (String)objErrMsgGender;
+        //Check if msg exist
+        Object objErrMsg = request.getAttribute("errMsgName");
+        if(objErrMsg != null ){
+            String strErrMsg = (String)objErrMsg;
+            sb.append("<div><p>");
             sb.append(strErrMsg);
-            sb.append(strErrMsg2);
-            sb.append(strErrMsg3);
-            sb.append(strErrMsg4);
+            sb.append("</p></div>");
         }
-        if(objErrMsgName != null){
-            String strErrMsg = (String)objErrMsgName;
-            sb.append(strErrMsg);
-        }
-        if(objErrMsgTextArea != null){
-            String strErrMsgTxt = (String)objErrMsgTextArea;
-            sb.append(strErrMsgTxt);
-        }
-        if(objErrMsgCategory != null){
-            String strErrCategory = (String)objErrMsgCategory;
-            sb.append(strErrCategory);
-        }
-        if(objErrMsgGender != null){
-            String strErrMsgGender = (String)objErrMsgGender;
-            sb.append(strErrMsgGender);
-        }
+        // read and write existing values
+        String customerName = request.getParameter("nameTextArea");
+        String gender = request.getParameter("gender");
+        String category = request.getParameter("category");
+        String message = request.getParameter("txtArea");
+
         sb.append(" <div class='row mt-5'>");
         sb.append(" <div class='col-12 form-group '>");
         sb.append("  <div class='form-group'>");
         sb.append("  <label for='nameId'>*Name:</label>");
-        sb.append("       <input class='form-control form-control-lg' type='text' id='nameId' name='nameTextArea' placeholder='e.g. John Smith' />");
+        if(customerName != null){
+            if (customerName.equals("")){
+                sb.append("<input autofocus class='form-control form-control-lg' type='text' id='nameId' name='nameTextArea' placeholder='e.g. John Smith' />");
+            }else {
+                sb.append("<input autofocus class='form-control form-control-lg' type='text' id='nameId' name='nameTextArea' placeholder='e.g. John Smith' value='" +customerName+ "'/>");
+            }
+        } else {
+            sb.append("<input autofocus class='form-control form-control-lg' type='text' id='nameId' name='nameTextArea' placeholder='e.g. John Smith' />");
+        }
         sb.append("    <p class='text-secondary'>Enter your full name.</p>");
         sb.append("   </div>");
         sb.append("  <div class='col-12 form-group'>");
         sb.append("   <label>*Gender: </label><br>");
-        sb.append("  <input type='checkbox' id='maleId' name='gender' value='male'>" );
+        sb.append("  <input type='checkbox' id='maleId' name='gender' value='male'" );
+        if(gender != null){
+            if(gender.equals("male")){
+//                sb.append("  <input checked type='checkbox' id='maleId' name='gender' value='male'>" );
+                sb.append(" checked>");
+            }else {
+//                sb.append("  <input type='checkbox' id='maleId' name='gender' value='male'>" );
+                sb.append(">");
+            }
+        }else {
+            sb.append("  <input type='checkbox' id='maleId' name='gender' value='male'>" );
+        }
         sb.append("  <label for='maleId'>Male</label>");
-        sb.append("     <input type='checkbox' id='femaleId' name='gender' value='female'>");
-        sb.append("   <label for='femaleId'>Male</label>");
+        sb.append("     <input type='checkbox' id='femaleId' name='gender' value='female'");
+        if(gender != null){
+            if(gender.equals("female")){
+//                sb.append("     <input checked type='checkbox' id='femaleId' name='gender' value='female'>");
+                sb.append(" checked>");
+            }else {
+//                sb.append("  <input type='checkbox' id='femaleId' name='gender' value='female'>" );
+                sb.append(">");
+            }
+        }else {
+            sb.append("  <input type='checkbox' id='femaleId' name='gender' value='female'>" );
+        }
+        sb.append("   <label for='femaleId'>Female</label>");
         sb.append("     </div>");
         sb.append("  <div class='col-12 form-group'>");
         sb.append("    <label for='categoryId'>*Category:</label>");
         sb.append("    <select id='categoryId' class='form-control form-control-lg' name='category'>");
-        sb.append("         <option value=''>Select...</option>");
-        sb.append("         <option value='CategoryOne'>Category One</option>");
-        sb.append("         <option value='CategoryTwo'>Category Two</option>");
-        sb.append("         <option value='CategoryThree'>Category Three</option>");
-        sb.append("         <option value='CategoryFour'>Category Four</option>");
+        if(category == null) {
+            sb.append("      <option value='null'>Select...</option>");
+            sb.append("      <option value='feedback'>Feedback</option>");
+            sb.append("      <option value='inquiry'>Inquiry</option>");
+            sb.append("      <option value='complaint'>Complaint</option>");
+        } else {
+            switch (category) {
+                case "null":
+                    sb.append("      <option selected value='null'>Select...</option>");
+                    sb.append("      <option value='feedback'>Feedback</option>");
+                    sb.append("      <option value='inquiry'>Inquiry</option>");
+                    sb.append("      <option value='complaint'>Complaint</option>");
+                    break;
+                case "feedback":
+                    sb.append("      <option value='null'>Select...</option>");
+                    sb.append("      <option selected value='feedback'>Feedback</option>");
+                    sb.append("      <option value='inquiry'>Inquiry</option>");
+                    sb.append("      <option value='complaint'>Complaint</option>");
+                    break;
+                case "inquiry":
+                    sb.append("      <option value='null'>Select...</option>");
+                    sb.append("      <option value='feedback'>Feedback</option>");
+                    sb.append("      <option selected value='inquiry'>Inquiry</option>");
+                    sb.append("      <option value='complaint'>Complaint</option>");
+                    break;
+                case "complaint":
+                    sb.append("      <option value='null'>Select...</option>");
+                    sb.append("      <option value='feedback'>Feedback</option>");
+                    sb.append("      <option value='inquiry'>Inquiry</option>");
+                    sb.append("      <option selected value='complaint'>Complaint</option>");
+                    break;
+                default:
+                    break;
+            }
+        }
         sb.append("    </select>");
         sb.append("   </div>");
         sb.append("  <div class='col-12 form-group'>");
-        sb.append("     <label for='messageId'>Example textarea</label>");
-        sb.append("    <textarea class='form-control' id='messageId' rows='3' name='txtArea'></textarea>");
-        sb.append("     </div>");
-        sb.append("    <div class='col-12 form-group'>");
-        sb.append(" <input id='submit' class='col-12 btn btn-primary btn-lg' type='submit' value='Submit'>");
-        sb.append("   </div>");
+        sb.append("     <label for='messageId'>*Message:</label>");
+        if(message != null){
+            if(message.equals("")){
+                sb.append("<textarea class='form-control' id='messageId' rows='3' name='txtArea'></textarea>");
+            }else {
+                sb.append("<textarea class='form-control' id='messageId' rows='3' name='txtArea'>"+message+"</textarea>");
+            }
+        }else {
+            sb.append("<textarea class='form-control' id='messageId' rows='3' name='txtArea'></textarea>");
+        }
 
+        sb.append("</div>");
+        sb.append("<div class='col-12 form-group'>");
+        sb.append("<input id='submit' class='col-12 btn btn-primary btn-lg' type='submit' value='Submit'>");
+        sb.append("</div>");
+
+        sb.append("<p>Hit Count for this page:"+ request.getServletContext().getAttribute("totalHitCount")+ "</p>");
         sb.append(" </div>");
         sb.append(" </div>");
         sb.append("</form>");
@@ -141,7 +201,7 @@ public class ContactFormServlet extends HttpServlet {
         sb.append("integrity='sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n'");
         sb.append("crossorigin='anonymous'></script>");
         sb.append("<script src='https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js'");
-                sb.append("integrity='sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo'");
+        sb.append("integrity='sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo'");
         sb.append("crossorigin='anonymous'></script>");
         sb.append("<script src='https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js");
         sb.append(" integrity='sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6'");
@@ -150,7 +210,6 @@ public class ContactFormServlet extends HttpServlet {
 
         sb.append("</body>");
         sb.append("</html>");
-        PrintWriter printWriter = response.getWriter();
-        printWriter.println(sb.toString());
+        return sb;
     }
 }

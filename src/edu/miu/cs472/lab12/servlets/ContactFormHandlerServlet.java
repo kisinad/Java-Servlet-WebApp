@@ -1,5 +1,6 @@
 package edu.miu.cs472.lab12.servlets;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -10,59 +11,58 @@ import java.io.IOException;
 
 @WebServlet(name = "ContactFormHandlerServlet", urlPatterns = {"/ContactFormHandlerServlet", "/contactformhandler"})
 public class ContactFormHandlerServlet extends HttpServlet {
+    public ContactFormHandlerServlet() {
+        super();
+    }
+
+    @Override
+    public void init() throws ServletException {
+        super.init();
+    }
+
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         //handler for form-data submitted
+        String missingFieldsMsg = "";
         String fullName = request.getParameter("nameTextArea");
         String gender = request.getParameter("gender");
         String category = request.getParameter("category");
         String msgArea = request.getParameter("txtArea");
+        System.out.println("name=" + fullName + ", gender= " + gender + ", category= " + category + ", msg= " + msgArea);
 
-        if((fullName == "" || fullName == null) && (msgArea == "" || msgArea == null) && (category == null || category == "") && (gender == null)){
-            String errMsgName = "<span style='color:red;'>Your Name is required!</span><br />";
-            request.setAttribute("errMsgName", errMsgName);
-            String errMsgTextArea = "<span style='color:red;'>Message is missing.</span><br />";
-            request.setAttribute("errMsgTextArea", errMsgTextArea);
-            String errMsgCategory = "<span style='color:red;'>Category is missing.</span><br />";
-            request.setAttribute("errMsgCategory", errMsgCategory);
-            String errMsgGender = "<span style='color:red;'>Gender is missing.</span><br />";
-            request.setAttribute("errMsgGender", errMsgGender);
-            request.getRequestDispatcher("/contactform").forward(request, response);
+        //check for missing fields data
+        if(fullName.equals("")){
+            missingFieldsMsg += "<span style='color:red;'>Your Name is required!</span><br />";
         }
-        else if(fullName == "" || fullName == null){
-            //go back to the form
-            String errMsgName = "<span style='color:red;'>Your Name is required!</span><br />";
-            request.setAttribute("errMsgName", errMsgName);
-            //forward back to the form servlet
-            request.getRequestDispatcher("/contactform").forward(request, response);
+
+        if (category.equals("null")) {
+            missingFieldsMsg += "<span style='color:red;'>Category is missing.</span><br />";
         }
-        else if(msgArea == "" || msgArea == null){
-            String errMsgTextArea = "<span style='color:red;'>Message is missing.</span><br />";
-            request.setAttribute("errMsgTextArea", errMsgTextArea);
-            request.getRequestDispatcher("/contactform").forward(request, response);
-        }else if(category == ""){
-            String errMsgCategory = "<span style='color:red;'>Category is missing.</span><br />";
-            request.setAttribute("errMsgCategory", errMsgCategory);
-            request.getRequestDispatcher("/contactform").forward(request, response);
+        if (gender == null){
+           missingFieldsMsg += "<span style='color:red;'>Gender is missing.</span><br />";
         }
-        else if(gender == null){
-            String errMsgGender = "<span style='color:red;'>Gender is missing.</span><br />";
-            request.setAttribute("errMsgGender", errMsgGender);
-            request.getRequestDispatcher("/contactform").forward(request, response);
+        if (msgArea.equals("")){
+            missingFieldsMsg += "<span style='color:red;'>Message is missing.</span><br />";
+        }
+        if(!missingFieldsMsg.equals("")){
+            request.setAttribute("errMsgName", missingFieldsMsg);
+            //forward back to sender
+            RequestDispatcher rd = request.getRequestDispatcher("/contactform");
+            rd.forward(request, response);
         }
         else {
             //go thank you page
             HttpSession session = request.getSession(true);
-            session.setAttribute("Name", ": " + fullName);
-            session.setAttribute("Gender", "Gender : " + gender);
-            session.setAttribute("Category", "Category : " + category);
-            session.setAttribute("MessageArea", "Message : " + msgArea);
-            String url = "thankyou?fullName=" + fullName;
+            session.setAttribute("Name",fullName);
+            session.setAttribute("Gender", gender);
+            session.setAttribute("Category", category);
+            session.setAttribute("TxtArea", msgArea);
+            String url = "thankyou?fullName=" + fullName +"&radioGender="+gender+"&ddlCategory="+category+"&message="+msgArea;
             response.sendRedirect(url); // HTTP response code 302
         }
 
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        doPost(request, response);
+        response.sendRedirect("contactform");
     }
 }

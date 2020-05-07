@@ -7,26 +7,49 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 @WebServlet(name = "ThankYouServlet", urlPatterns = {"/ThankYouServlet", "/thankyou"})
 public class ThankYouServlet extends HttpServlet {
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    private static final long serialVersionUID = 1L;
+    private int hitCount;
+    public ThankYouServlet() {
+        super();
+    }
 
+    @Override
+    public void init() throws ServletException {
+        super.init();
+    }
+    private synchronized int incrHitCount(){
+        return this.hitCount++;
+    }
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+//        doGet(request, response);
+//        response.sendRedirect("/contactform");
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String fullName = request.getParameter("fullName");
-        String gender = request.getParameter("gender");
-        String category = request.getParameter("category");
-        String msgArea = request.getParameter("msgArea");
-
-        StringBuilder sb = new StringBuilder();
-        ServletContext context = request.getServletContext();
-
-
+        incrHitCount();
+        String fullName = (String) request.getSession().getAttribute("Name");
+        String gender = (String) request.getSession().getAttribute("Gender");
+        String category = (String) request.getSession().getAttribute("Category");
+        String msgArea = (String) request.getSession().getAttribute("TxtArea");
         response.setContentType("text/html");
         response.setBufferSize(8192);
-//        StringBuilder sb = new StringBuilder();
+
+        System.out.println("name=" + fullName + ", gender= " + gender + ", category= " + category + ", msg= " + msgArea);
+        String output = this.getStringBuilder(fullName, gender, category, msgArea);
+        try (PrintWriter printWriter = response.getWriter()){
+            printWriter.println((output));
+        }
+
+    }
+
+    private String getStringBuilder(String fullName, String gender, String category, String msgArea) {
+        StringBuilder sb = new StringBuilder();
         sb.append("<!doctype html>");
         sb.append("<html lang='en'>");
         sb.append("<head>");
@@ -72,7 +95,7 @@ public class ThankYouServlet extends HttpServlet {
         sb.append("<main>");
         sb.append("<div class='container border mt-5'>");
         sb.append("<div class='col-12 form-group mb-5 mt-1'>");
-        sb.append("  <p class='text-secondary float-right'>Wednesday, 6 2020.</p>");
+        sb.append("  <p class='text-secondary float-right'>" + LocalDate.now().format(DateTimeFormatter.ofPattern("EEEE, dd MMMM yyyy")) + "</p>");
         sb.append(" </div>");
         sb.append(" <div class='col-12 form-group bg-light mt-5'>");
         sb.append("   <h1>Thank You! Your message has been received as follows:</h1>");
@@ -81,20 +104,24 @@ public class ThankYouServlet extends HttpServlet {
         sb.append("  <p>Name: "+fullName+ "</p>");
         sb.append("</div>");
         sb.append("<div class='col-12 form-group mt-5'>");
-        sb.append("  <p>"+ request.getSession().getAttribute("Gender")+ "</p>");
+        sb.append("<p> Gender: "+ gender + "</p>");
         sb.append("</div>");
         sb.append("<div class='col-12 form-group mt-5'>");
-        sb.append("   <p> " +request.getSession().getAttribute("Category")+"</p>");
+        sb.append("<p>Category: " +category+"</p>");
         sb.append("</div>");
         sb.append("<div class='col-12 form-group mt-5'>");
-        sb.append(" <p>" + request.getSession().getAttribute("MessageArea")+"</p>");
+        sb.append("<p>Message: " + msgArea +"</p>");
         sb.append("</div>");
 
         sb.append("</div>");
 
         sb.append("</main>");
-
-
+        // Display Hit count
+        Object objTotalHitCount = getServletContext().getAttribute("totalHitCount");
+        String totalHitCount = (objTotalHitCount != null) ? ((Integer)objTotalHitCount).toString() : "--";
+        sb.append("<div class=\"container\">");
+        sb.append("<span class=\"text-muted\">Hit Count for this page: " + this.hitCount +"</span><span style=\"float:right;\" class=\"text-muted\">Total Hit Count for the entire WebApp: " + totalHitCount + "</span>");
+        sb.append("</div>");
         sb.append("<script src='https://code.jquery.com/jquery-3.4.1.slim.min.js'");
         sb.append("integrity='sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n'");
         sb.append("crossorigin='anonymous'></script>");
@@ -106,9 +133,13 @@ public class ThankYouServlet extends HttpServlet {
         sb.append(" crossorigin='anonymous'></script>");
         sb.append("<script defer type='text/javascript' src='./js/app1.js'></script>");
 
+        sb.append("<footer class=\"footer\">");
+        sb.append("<div id=\"footer-content\">");
+        sb.append("<span class=\"text-muted\">D. Kisina ::: CS472-WAP</span><span style=\"float:right;\" class=\"text-muted\">&copy May 2020</span>");
+        sb.append("</div>");
+        sb.append("</footer>");
         sb.append("</body>");
         sb.append("</html>");
-        response.setContentType("text/html");
-        response.getWriter().println(sb.toString());
+        return sb.toString();
     }
 }
